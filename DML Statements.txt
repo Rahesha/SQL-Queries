@@ -1,0 +1,93 @@
+
+/* DATA MANIPULATION LANGUAGE -DML
+  INSERT INTO - The INSERT INTO statement is used to insert new records in a table. */
+--METHOD 1 -  Specify both the column names and the values to be inserted:
+
+INSERT INTO Employee(EmpID,Firstname,Lastname,Birthdate,Hiredate,Salary,DeptID)
+VALUES(1,'George','Simon','11-1-1984','1-7-2006 08:45:00',75000,10)
+
+--METHOD 2 - If you are adding values for all the columns of the table, you do not need to specify the column names in the SQL query. 
+--However, make sure the order of the values is in the same order as the columns in the table.
+
+INSERT INTO Employee
+VALUES(1,'George','Simon','11-1-1984','1-7-2006 08:45:00',75000,10)
+
+-- Inserting Data Only in Specified Columns
+INSERT INTO Employee(EmpID,Firstname,Lastname)
+VALUES(2,'Lisa','Hydson')
+
+-- Populating the table with multiple values
+
+INSERT INTO Employee VALUES (3, 'Michael', 'Johnson', '1992-08-10', '2015-02-28', 55000.75, 101),
+    (4, 'Emily', 'Brown', '1988-04-05', '2012-11-10', 80000.00, 103),
+    (5, 'William', 'Miller', '1995-02-28', '2018-09-05', 70000.25, 102),
+    (6, 'Olivia', 'Davis', '1987-09-12', '2013-06-20', 65000.50, 103),
+    (7, 'James', 'Wilson', '1993-11-08', '2016-04-03', 90000.00, 101),
+    (8, 'Sophia', 'Martinez', '1986-06-25', '2009-08-15', 72000.75, 102),
+    (9, 'Alexander', 'Anderson', '1991-03-18', '2014-01-12', 58000.00, 103),
+    (10, 'Ava', 'Garcia', '1989-07-30', '2011-10-25', 85000.50, 101),
+    (11, 'Daniel', 'Taylor', '1994-01-22', '2017-07-08', 62000.75, 102),
+    (12, 'Mia', 'Clark', '1984-10-05', '2007-05-18', 77000.00, 103),
+    (13, 'Ethan', 'Hernandez', '1996-04-15', '2019-12-01', 69000.25, 101),
+    (14, 'Chloe', 'Lopez', '1983-12-08', '2006-02-14', 92000.50, 102),
+    (15, 'Liam', 'Williams', '1997-09-03', '2020-06-05', 80000.75, 103),
+    (16, 'Emma', 'Jackson', '1982-05-20', '2005-09-30', 54000.00, 101),
+    (17, 'Benjamin', 'Moore', '1998-02-10', '2021-03-12', 78000.50, 102),
+    (18, 'Avery', 'White', '1981-08-22', '2004-12-24', 67000.75, 103),
+    (19, 'Logan', 'Harris', '1999-06-18', '2022-01-18', 94000.00, 101),
+    (20, 'Grace', 'Martin', '1980-11-28', '2003-07-09', 71000.25, 102)
+
+
+/* UPDATE - The UPDATE statement is used to modify the existing records in a table.
+We can update single columns as well as multiple columns using the UPDATE statement as per our requirement.
+UPDATE makes use of SET clause. The SET Clause is used to set new values to the particular column and WHERE clause is used to specify
+the rows from where column needs to be updated. */
+
+UPDATE Employee
+SET Salary = 100000
+WHERE EmpID = 20
+
+SELECT * FROM Employee
+
+UPDATE Employee
+SET Salary = 100000
+WHERE EmpID in (10,17,7)
+
+UPDATE Employee
+SET Salary = 100000
+
+-- Updating multiple columns at the same time
+
+UPDATE Employee
+SET Firstname = 'Laura',
+lastname = 'Hart',
+birthdate = '11-6-1994',
+Hiredate = '12-11-2021',
+salary = 32000,
+deptID = 30
+WHERE empID = 4
+
+
+/* DELETE - The DELETE statement is used to delete existing records in a table. */
+
+--Delete a Specific Row
+
+DELETE FROM Employee
+WHERE EmpID = 20
+
+--Delete some records
+
+DELETE FROM Employee
+WHERE EmpID between 1 and 5
+
+DELETE FROM Employee
+WHERE EmpID in (6,8,10,12,14)
+
+DELETE FROM Employee
+WHERE Salary > 75000
+
+--Delete without WHERE
+/*It is possible to delete all rows in a table without deleting the table. 
+This means that the table structure, attributes, and indexes will be intact. */
+
+DELETE FROM Employee
