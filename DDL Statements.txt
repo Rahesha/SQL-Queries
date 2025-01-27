@@ -1,0 +1,34 @@
+/* DDL COMMANDS
+
+  CREATE TABLE - The CREATE TABLE statement is used to create a new table in a database. */
+CREATE TABLE Emp(
+	EmpID INT not null PRIMARY KEY,
+	Firstname VARCHAR(50),
+	Lastname VARCHAR(50),
+	Birthdate DATE,
+	Hiredate DATETIME,
+	Salary INT 
+)
+
+/* ALTER TABLE STATEMENT - The ALTER TABLE statement is used to add, delete, or modify columns in an existing table. */
+
+-- ADDING NEW COLUMN
+ALTER TABLE Emp
+ADD Department INT, Email VARCHAR(50), Phone INT
+
+--DROP A COLUMN
+ALTER TABLE Emp
+DROP COLUMN Email,Phone 
+
+--MODIFYING AN EXISTING COLUMN
+ALTER TABLE Emp
+ALTER COLUMN Salary MONEY
+
+/* RENAME- Rename an object existing in the database */
+
+sp_rename 'emp','Employee' 
+
+sp_rename 'Employee.Department', 'DeptID', 'column'
+
+/* TRUNCATE - Remove all records from a table, including all spaces allocated for the records are removed.*/
+TRUNCATE TABLE Employee

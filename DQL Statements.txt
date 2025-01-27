@@ -1,0 +1,153 @@
+/* DATA QUERY LANGUAGE(DQL) 
+DQL is a set of of SQL statement and clauses that allows getting data from the database and imposing orders upon it. 
+It includes the SELECT statement along with FROM, WHERE, GROUP BY, HAVING, ORDER BY, DISTINCT. 
+This command allows getting the data out of the database to perform operations with it.*/
+
+USE AdventureWorks2016
+
+/*SELECT STATEMENT WITH FROM CLAUSE - The SELECT statement is used to select data from a database. */
+
+-- Selecting all the columns from a table.
+
+SELECT * FROM HumanResources.Employee
+
+-- Selecting specific columns.
+
+SELECT BusinessEntityID, JobTitle, BirthDate
+FROM HumanResources.Employee
+
+
+/* WHERE - The WHERE clause is used to filter records.
+It is used to extract only those records that fulfill a specified condition.*/
+
+-- Qry 1
+
+select BusinessEntityID,JobTitle,BirthDate,OrganizationLevel
+from HumanResources.Employee
+where OrganizationLevel > 3
+
+-- Qry 2
+
+select BusinessEntityID,JobTitle,BirthDate,OrganizationLevel
+from HumanResources.Employee
+where BusinessEntityID between 50 and 70
+
+-- Qry 3
+
+select BusinessEntityID,JobTitle,BirthDate,OrganizationLevel
+from HumanResources.Employee
+where BusinessEntityID in(5,7,77,23,65,95,190)
+
+-- Qry 4
+
+select BusinessEntityID,JobTitle,BirthDate,OrganizationLevel
+from HumanResources.Employee
+where OrganizationLevel = 1 or OrganizationLevel = 4
+
+-- Qry 5
+
+select BusinessEntityID,JobTitle,BirthDate,OrganizationLevel
+from HumanResources.Employee
+where MaritalStatus = 'S'
+
+-- Qry 6
+
+select BusinessEntityID,JobTitle,BirthDate,OrganizationLevel
+from HumanResources.Employee
+where year(HireDate) = 2005
+
+/* GROUP BY - The GROUP BY statement groups rows that have the same values into summary rows, like "find the number of customers in each country".
+The GROUP BY statement is often used with aggregate functions (COUNT(), MAX(), MIN(), SUM(), AVG()) to group the result-set by one or more columns. */
+
+SELECT JobTitle,COUNT(BusinessEntityID) as 'CountOfEmp'
+FROM HumanResources.Employee
+GROUP BY jobtitle
+
+/* HAVING CLAUSE - The HAVING clause was added to SQL because the WHERE keyword cannot be used with aggregate functions. */
+
+SELECT JobTitle, COUNT(BusinessEntityID) AS 'CountOFEmp'
+FROM AdventureWorks2016.HumanResources.Employee
+GROUP BY jobtitle
+HAVING COUNT(BusinessEntityID) > 20
+
+/* DISTINCT - The SELECT DISTINCT statement is used to return only distinct (different) values. */
+
+select firstname from person.Person
+
+select distinct firstname from person.Person
+
+select distinct jobtitle from HumanResources.Employee
+
+/* ORDER BY -The ORDER BY keyword is used to sort the result-set in ascending or descending order. By default it orders in ascending.*/
+
+SELECT JobTitle, COUNT(BusinessEntityID) AS 'CountOFEmp'
+FROM AdventureWorks2016.HumanResources.Employee
+GROUP BY jobtitle
+ORDER BY COUNT(BusinessEntityID)
+
+-- Descending Order
+
+SELECT JobTitle, count(BusinessEntityID) AS 'CountOFEmp'
+FROM AdventureWorks2016.HumanResources.Employee
+GROUP BY jobtitle
+ORDER BY COUNT(BusinessEntityID) DESC
+
+-- or
+
+SELECT JobTitle, COUNT(BusinessEntityID) AS CountOFEmp
+FROM AdventureWorks2016.HumanResources.Employee
+GROUP BY jobtitle
+ORDER BY CountofEmp
+
+-- Sort Based on one or more column
+
+SELECT JobTitle, COUNT(BusinessEntityID) AS CountOFEmp
+FROM AdventureWorks2016.HumanResources.Employee
+GROUP BY jobtitle
+ORDER BY CountofEmp,JobTitle
+
+-- Using Both ASC and DESC
+
+SELECT * FROM AdventureWorks2016.HumanResources.Employee
+ORDER BY JobTitle ASC, BirthDate DESC
+
+-- Order of Query Execution:
+
+/*
+We write the query like this:
+
+1. SELECT 
+2. DISTINCT
+3. FROM
+4. JOIN
+5. WHERE
+6. GROUP BY 
+7. HAVING
+8. ORDER BY
+*/
+
+-- The QUERY actually is exeuted in the background like this :
+
+/*
+1. FROM
+2. JOIN
+3. WHERE
+4. GROUP BY 
+5. HAVING
+6. SELECT
+7. DISTINCT
+8. ORDER BY
+*/
+
+/*	AND OPERATOR - The WHERE clause can contain one or many AND operators.
+The AND operator is used to filter records based on more than one condition, like if you want to return all customers from Spain 
+that starts with the letter 'G'.*/
+
+SELECT * FROM Person.Address
+WHERE City = 'Seattle' AND AddressLine1 LIKE '%Olive%'
+
+/*	OR OPERATOR - The OR operator is used to filter records based on more than one condition, 
+like if you want to return all customers from Germany but also those from Spain. */
+
+SELECT * FROM Person.Address
+WHERE City = 'Seattle' OR AddressLine1 LIKE '%Olive%'
