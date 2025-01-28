@@ -1,0 +1,46 @@
+USE SQLPractice
+
+/* SELECT INTO - The SELECT INTO statement copies data from one table into a new table. */
+
+-- Copy all columns into a new table.
+SELECT * INTO EmployeeCopy
+FROM Employee
+
+SELECT * FROM EmployeeCopy
+
+-- Copy only some columns into a new table.
+
+SELECT EmpID, Firstname, Lastname, salary
+INTO EmployeeCopy
+FROM Employee
+
+-- Copy Specific columns with conditions.
+
+select EmpID, Firstname, Lastname, salary
+into EmployeeCopy
+from Employee
+where Salary > 80000
+
+-- If you want to copy the structure of another table but not the data then you would use SELECT into and give a wrong condition in the WHERE clause.
+
+select EmpID, Firstname, Lastname, salary
+into EmployeeCopy
+from Employee
+where 1=0
+
+
+/* INSERT INTO - The INSERT INTO SELECT statement copies data from one table and inserts it into another table.
+The INSERT INTO SELECT statement requires that the data types in source and target tables match. */
+
+-- Copy all columns from one table to another table.
+
+INSERT INTO EmployeeCopy
+SELECT * FROM Employee
+where Salary > 80000
+
+--Copy only some columns from one table to another table.
+
+INSERT INTO EmployeeCopy(EmpID,Firstname,Lastname)
+SELECT EmpID,Firstname,Lastname
+FROM Employee
+WHERE Salary > 80000
