@@ -1,0 +1,88 @@
+USE AdventureWorks2016 database
+/* JOINS - A JOIN clause is used to combine rows from two or more tables, based on a related column between them.
+Joins are of 4 types:
+1. Inner Join
+2. Outer Join
+	1. Left Outer Join
+	2. Right Outer Join
+	3. Full Outer Join
+3. Self Join 
+4. Cross Join */
+
+/* Q. Calculate the total number of products in each product subcategory. 
+Display the product subcategory name and the total number of products. 
+Order the results by the total number of products in descending order.*/
+
+SELECT *
+FROM Production.ProductSubcategory
+
+SELECT *
+FROM Production.Product
+
+SELECT COUNT(P.ProductID) as TotalProducts, PS.Name as ProductSubcategoryName
+FROM Production.ProductSubcategory PS
+INNER JOIN Production.Product P
+ON P.ProductSubcategoryID = PS.ProductSubcategoryID
+GROUP BY PS.Name
+ORDER BY TotalProducts DESC
+-----------------------------------------------------------------------------------------
+
+/*  Q. Calculate the average order quantity for each product model.
+Display the product model and the average order quantity. 
+Order the results by the average order quantity in descending order.*/
+
+
+SELECT AVG(SOD.OrderQty) as AvgOrderQty, PM.Name as ProductModelName
+FROM Sales.SalesOrderDetail SOD
+INNER JOIN Production.Product P
+	ON SOD.ProductID = P.ProductID
+	JOIN Production.ProductModel PM
+		ON PM.ProductModelID = P.ProductModelID
+	GROUP BY PM.Name
+	ORDER BY AvgOrderQty DESC
+
+SELECT *
+FROM Sales.SalesOrderDetail SOD
+
+SELECT *
+FROM Production.Product
+
+SELECT *
+FROM Production.ProductModel
+
+------------------------------------------------------------------------------------------------
+
+/* Q. Find the total sales amount for each sales territory for the year 2013. 
+Display the sales territory and the total sales amount.
+Exclude territories where the total sales amount is less than $1,000,000. */
+
+select * from sales.salesorderheader
+select * from sales.salesterritory
+
+SELECT SUM(SOH.TotalDue) as TotalSalesAmount, ST.Name as TerritoryName
+FROM sales.salesorderheader SOH
+	JOIN sales.salesterritory ST
+		ON SOH.TerritoryID = ST.TerritoryID
+		WHERE YEAR(SOH.DueDate) = '2013'
+		GROUP BY ST.Name
+		HAVING SUM(SOH.TotalDue) >= 1000000
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/* Q.Find the average standard cost for each product category, but only include categories with an average standard cost greater than $100.*/
+
+SELECT *
+FROM Production.ProductCategory
+SELECT *
+FROM Production.Product
+SELECT *
+FROM Production.ProductSubcategory
+
+SELECT PC.Name as ProductCategoryName , AVG(P.StandardCost) as AvgStandardCost
+FROM Production.ProductCategory PC
+JOIN Production.ProductSubcategory PS
+	ON PC.ProductCategoryID = PS.ProductCategoryID
+	JOIN Production.Product P
+		ON PS.ProductSubcategoryID = P.ProductSubcategoryID
+GROUP BY PC.Name
+HAVING AVG(P.StandardCost) > 100
+
