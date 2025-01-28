@@ -1,0 +1,186 @@
+
+/* CONSTRAINTS - Constraint in SQL Server are predefined rules and restrictions that are enforced on a single column or multiple columns, 
+regarding the values allowed in the columns, to maintain the integrity, accuracy, and reliability of that column’s data. 
+-- There are six main constraints that are commonly used in SQL Server
+--PRIMARY KEY
+--FOREIGN KEY
+--UNIQUE
+--CHECK
+--DEFAULT
+--NOT NULL  
+*/
+
+
+
+CREATE TABLE Dept (
+    DepartmentID INT,
+    DeptName NVARCHAR(50) NOT NULL,
+    ManagerID INT,
+    Location NVARCHAR(100),
+    EstablishedDate DATE,
+    Budget DECIMAL(15, 2)
+)
+
+INSERT INTO Dept (DepartmentID, DeptName, ManagerID, Location, EstablishedDate, Budget)
+VALUES
+    (101, 'Finance', 201, 'New York', '2000-05-15', 1000000.00),
+    (102, 'Human Resources', 202, 'Chicago', '1998-09-22', 800000.50),
+    (103, 'Information Technology', 203, 'San Francisco', '2005-02-10', 1500000.75),
+    (104, 'Marketing', 204, 'Los Angeles', '2008-11-30', 1200000.25),
+    (105, 'Operations', 205, 'Dallas', '2013-06-18', 900000.00)
+
+SELECT * FROM Employee
+SELECT * FROM Dept
+
+
+/* APPLYING CONSTRAINTS ON A TABLE - THERE ARE DIFFERENT WAYS TO APPLY CONSTRAINTS. */
+
+-- Method 1: Create table first and apply constraint afterwards using ALTER statement.
+-- Primary Key constraint cannot be created on a column which accepts NULL values because PRIMARY KEY column cannot have NULL values by Rule. 
+-- So Fisrt we have to apply NOT NULL constraint on the employee column.
+
+ALTER TABLE employee
+ALTER COLUMN empid INT NOT NULL
+
+-- Apply the PRIMARY KEY constraint:
+
+ALTER TABLE employee
+ADD CONSTRAINT PK_Emp_EmployeeID
+PRIMARY KEY(EmpID)
+
+-- Apply FOREIGN KEY constraint:
+
+ALTER TABLE Employee
+ADD CONSTRAINT FK_Department_DepartmentID
+FOREIGN KEY(DepartmentID)
+REFERENCES dept(departmentid)
+
+ALTER TABLE dept
+ALTER COLUMN departmentid INT NOT NULL
+
+ALTER TABLE dept
+ADD CONSTRAINT  PK_Dept_DeptID
+PRIMARY KEY(DepartmentID)
+
+-- Apply UNIQUE KEY constraint:
+
+ALTER TABLE employee
+ADD CONSTRAINT  UK_Emp_Firstname
+UNIQUE(Firstname)
+
+-- Dropping a constraint
+
+ALTER TABLE employee
+DROP CONSTRAINT UK_Emp_Firstname
+
+-- Apply CHECK constraint
+
+-- Example 1
+
+ALTER TABLE employee
+ADD CONSTRAINT CHK_Emp_EmpSal
+CHECK(salary > 50000)
+
+INSERT INTO Employee
+VALUES
+    (21, 'Rita', 'Ora', '1994-06-5', '2010-04-02', 49000.00,105, 1)
+
+SELECT * FROM Employee
+
+-- Example 2
+
+ALTER TABLE employee
+ADD CONSTRAINT CHK_Emp_Valid_Age
+CHECK(Birthdate<=dateadd(year,-18,getdate()))
+
+INSERT INTO Employee
+VALUES(22, 'May', 'Parker', '2010-05-05', '2024-04-02', 52000.00,105, 1)
+
+DELETE FROM Employee
+WHERE empid = 22
+
+ALTER TABLE employee
+DROP CONSTRAINT chk_emp_valid_age
+
+TRUNCATE TABLE employee
+
+-- Method 2 : Apply the constraints while creating the table
+
+DROP TABLE Employee
+DROP TABLE Dept
+
+CREATE TABLE Emp (
+    EmployeeID INT Primary key,
+    FirstName NVARCHAR(50),
+    LastName NVARCHAR(50) default 'NoLastName',
+    BirthDate DATE,
+    HireDate DATETIME,
+    Salary DECIMAL(10, 2) check(Salary > 0), check(salary between 50000 and 120000),
+    DepartmentID INT foreign key references dept(departmentid)
+)
+
+CREATE TABLE Dept (
+    DepartmentID INT Primary key,
+    DeptName NVARCHAR(50) NOT NULL,
+    ManagerID INT unique,
+    Location NVARCHAR(100),
+    EstablishedDate DATE,
+    Budget DECIMAL(15, 2)
+)
+
+-- Giving the names to the constraints in method 2:
+
+DROP TABLE emp
+DROP TABLE dept
+
+CREATE TABLE Emp (
+    EmployeeID INT constraint PK_EMP_EMPID Primary key,
+    FirstName NVARCHAR(50),
+    LastName NVARCHAR(50) constraint DF_EMP_LN default 'NoLastName',
+    BirthDate DATE,
+    HireDate DATETIME,
+    Salary DECIMAL(10, 2) constraint CHK_EMP_SAL1 check(Salary > 0),constraint CHK_EMP_SAL2 check(salary between 50000 and 120000),
+    DepartmentID INT constraint df_deptid default null constraint fk_deptid foreign key references dept(departmentid)
+)
+
+CREATE TABLE Dept (
+    DepartmentID INT constraint PK_DEPT_DEPTID Primary key,
+    DeptName NVARCHAR(50) NOT NULL,
+    ManagerID INT constraint UK_DEPT_MGID unique,
+    Location NVARCHAR(100),
+    EstablishedDate DATE,
+    Budget DECIMAL(15, 2)
+)
+
+-- Method 3 : Apply constraint while creating the table but un this we separate the syntax of applying the constraints from the columns.
+
+DROP TABLE emp
+DROP TABLE dept
+
+CREATE TABLE Emp (
+    EmployeeID INT,
+    FirstName NVARCHAR(50),
+    LastName NVARCHAR(50),
+    BirthDate DATE,
+    HireDate DATETIME,
+    Salary DECIMAL(10, 2),
+    DepartmentID INT,
+    IsActive BIT
+
+	constraint PK_EMP_EMPID primary key(EmployeeID),
+	constraint CHK_EMP_SAL1 check(Salary > 0),
+	constraint CHK_EMP_SAL2 check(salary between 50000 and 120000),
+	constraint FK_EMP_DEPTID foreign key(DepartmentID) references dept(departmentid)
+)
+
+CREATE TABLE Dept (
+    DepartmentID INT,
+    DeptName NVARCHAR(50) NOT NULL,
+    ManagerID INT,
+    Location NVARCHAR(100),
+    EstablishedDate DATE,
+    Budget DECIMAL(15, 2)
+
+	constraint PK_DEPT_DEPTID Primary key(Departmentid),
+	constraint UK_DEPT_MGID unique(ManagerID)
+)
